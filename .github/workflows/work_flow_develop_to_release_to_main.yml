@@ -38,25 +38,28 @@ jobs:
         run: |
           coverage run -m unittest tests/test_persona.py
           coverage report -m  
-  job2:
-    name: crear_rama_release
+  job3:
+    name: merge_to_main
     needs: job1
     runs-on: ubuntu-latest
     steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M:%S')"
+      - name: Test with environment variables
+        run: echo $TAG_NAME - $RELEASE_NAME
+        env:
+          TAG_NAME: nightly-tag-${{ steps.date.outputs.date }}
+          RELEASE_NAME: nightly-release-${{ steps.date.outputs.date }}
       - name: Check out code
         uses: actions/checkout@v2
       - name: Crear rama
         run: |
-          git checkout -b release/v${{ github.event.inputs.versionName }}
-          git push -f -u origin release/v${{ github.event.inputs.versionName }}
-  job3:
-    name: merge_to_main
-    needs: job2
-    runs-on: ubuntu-latest
-    steps:
+          git checkout -b release/${RELEASE_NAME}
+          git push -f -u origin release/${RELEASE_NAME}
       - name: Mezcla realese -> main
         uses: tukasz/direct-merge-action@master
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          source-branch: release/v${{ github.event.inputs.versionName }}
+          source-branch: release/${RELEASE_NAME}
           target-branch: main        
