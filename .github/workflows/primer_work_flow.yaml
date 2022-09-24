@@ -4,12 +4,13 @@ on:
     branches: [ main ] 
 jobs:
   Mi-primer-job:
-    name: mi primer job
+    name: Mi-primer-job
     runs-on: ubuntu-latest
     outputs:
       salida: ${{ steps.Imprimir.outputs.respuesta }}
     steps:
       - name: Imprimir
+        id: imprimir
         env: 
           MI_VARIABLE: HOLA MUNDO
         run:
