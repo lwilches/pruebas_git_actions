@@ -4,10 +4,10 @@ from  src.pruebas_git_actions.modelo.persona import Persona
 
 class test_persona(unittest.TestCase):
     def setUp(self):
-        self.persona1 = Persona( nombre= 'Alejandra' ,edad= 25 )
-        self.persona2 = Persona(nombre='Diego', edad=22)
-        self.persona3 = Persona(nombre='Alejandra', edad=25)
-        self.persona4 = Persona(nombre='Diana', edad=25)
+        self.persona1 = Persona( nombre= 'Alejandra' ,edad= 25 , apellido = "Wilches" )
+        self.persona2 = Persona(nombre='Diego', edad=22 ,  apellido = "wilches" )
+        self.persona3 = Persona(nombre='Alejandra', edad=25 ,  apellido = "wilches" )
+        self.persona4 = Persona(nombre='Diana', edad=25,  apellido = "wilches" )
         self.grupo = [ self.persona1 , self.persona2 , self.persona3 ]
     
     def test_constructor(self):
@@ -27,6 +27,9 @@ class test_persona(unittest.TestCase):
         self.assertFalse(self.persona2.dar_edad()==22)
         self.assertTrue(self.persona2.dar_nombre()=='Felipe')
         self.assertTrue(self.persona2.dar_edad()==28)
+
+    def test_nombre_completo(self ):
+        self.assertTrue(self.persona1.dar_nombre_completo()=='Alejandra Wilches')
 
     def test_objetos_iguales(self):
         persona_nueva = self.persona1
