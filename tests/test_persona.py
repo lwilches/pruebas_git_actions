@@ -4,10 +4,10 @@ from  src.pruebas_git_actions.modelo.persona import Persona
 
 class test_persona(unittest.TestCase):
     def setUp(self):
-        self.persona1 = Persona( nombre= 'Alejandra' ,edad= 25 , apellido = "Wilches" )
-        self.persona2 = Persona(nombre='Diego', edad=22 ,  apellido = "wilches" )
-        self.persona3 = Persona(nombre='Alejandra', edad=25 ,  apellido = "wilches" )
-        self.persona4 = Persona(nombre='Diana', edad=25,  apellido = "wilches" )
+        self.persona1 = Persona( nombre= 'Alejandra' ,edad= 25 , apellido = "Wilches", tipo_doc=1 , nro_doc= "11448243" )
+        self.persona2 = Persona(nombre='Diego', edad=22 ,  apellido = "wilches", tipo_doc=1 , nro_doc= "11448243" )
+        self.persona3 = Persona(nombre='Alejandra', edad=25 ,  apellido = "wilches" , tipo_doc=1 , nro_doc= "11448243")
+        self.persona4 = Persona(nombre='Diana', edad=25,  apellido = "wilches", tipo_doc=1 , nro_doc= "11448243" )
         self.grupo = [ self.persona1 , self.persona2 , self.persona3 ]
     
     def test_constructor(self):
@@ -30,6 +30,11 @@ class test_persona(unittest.TestCase):
 
     def test_nombre_completo(self ):
         self.assertTrue(self.persona1.dar_nombre_completo()=='Alejandra Wilches')
+
+    def test__recura_cedula_ok(self):
+        tipo_doc , nro_doc = self.persona1.dar_info_documento()
+        self.assertEquals( tipo_doc, 1   )
+        self.assertEquals( nro_doc,"11448243" )
 
     def test_objetos_iguales(self):
         persona_nueva = self.persona1
