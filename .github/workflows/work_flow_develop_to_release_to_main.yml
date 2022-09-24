@@ -43,12 +43,12 @@ jobs:
     needs: job1
     runs-on: ubuntu-latest
     steps:
+      - name: Check out code
+        uses: actions/checkout@v2
       - name: Crear rama
-        env:
-          rama: release/release_test
         run: |
-          git checkout -b release_test
-          git push -f -u origin release_test
+          git checkout -b release/v${{ github.event.inputs.versionName }}
+          git push -f -u origin release/v${{ github.event.inputs.versionName }}
   job3:
     name: merge_to_main
     needs: job2
@@ -58,5 +58,5 @@ jobs:
         uses: tukasz/direct-merge-action@master
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          source-branch: release_test
+          source-branch: release/v${{ github.event.inputs.versionName }}
           target-branch: main        
