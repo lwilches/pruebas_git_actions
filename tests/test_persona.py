@@ -1,4 +1,3 @@
-from importlib.metadata import SelectableGroups
 import datetime
 import unittest
 from  src.pruebas_git_actions.modelo.persona import Persona
