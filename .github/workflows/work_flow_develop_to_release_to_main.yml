@@ -55,11 +55,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Crear rama
         run: |
-          git checkout -b release/${RELEASE_NAME}
-          git push -f -u origin release/${RELEASE_NAME}
+          git checkout -b release/${{ steps.date.outputs.date }}
+          git push -f -u origin release/${{ steps.date.outputs.date }}
       - name: Mezcla realese -> main
         uses: tukasz/direct-merge-action@master
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          source-branch: release/${RELEASE_NAME}
+          source-branch: release/${{ steps.date.outputs.date }}
           target-branch: main        
