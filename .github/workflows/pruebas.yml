@@ -21,8 +21,7 @@ jobs:
       - name: Correr pruebas
         id: correr-pruebas
         run: |
-          python -m coverage run -m unittest discover -s tests -v
-          python -m coverage html
+          python  -m unittest discover -s tests -v
       - name: validar resultado con errores
         if: ${{failure()}}
         env:
