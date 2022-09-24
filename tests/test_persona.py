@@ -2,6 +2,7 @@ import datetime
 import unittest
 from  src.pruebas_git_actions.modelo.persona import Persona
 
+#comntario
 class test_persona(unittest.TestCase):
     def setUp(self):
         self.persona1 = Persona( nombre= 'Alejandra' ,edad= 25 , apellido = "Wilches", tipo_doc=1 , nro_doc= "11448243" )
