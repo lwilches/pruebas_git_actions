@@ -1,0 +1,62 @@
+name: ci_feature_to_develop
+on: 
+  push:
+    branches:
+      - develop
+jobs:
+  job1:
+    name: compilar_ci
+    if:  ${{ contains(github.event.head_commit.message, 'crear_release') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repositorio
+        uses: actions/checkout@v2
+      - name: Configuración entorno phyton
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10.6'
+      - name: instalacion de librerias y dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Correr pruebas
+        id: correr-pruebas
+        run: |
+          python  -m unittest discover -s tests -v
+      - name: validar resultado con errores
+        if: ${{failure()}}
+        env:
+          MENSAJE_ERROR: UNA O VARIAS PRUEBAS FALLARON 
+        run: "::set-output name=respuesta::${MENSAJE_ERROR}"
+      - name: valdiar resultado sin errores
+        if: ${{success()}}
+        env:
+          MENSAJE_EXITO: TODAS LAS PRUEBAS FUERON EXITOSAS
+        run: echo "::set-output name=respuesta::${MENSAJE_EXITO}"
+      - name: Calculo de cubrimiento
+        id: cubrimiento
+        run: |
+          coverage run -m unittest tests/test_persona.py
+          coverage report -m  
+  job2:
+    name: crear_rama_release
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Crear rama
+        env:
+          rama: release/release_test
+        run: |
+          git checkout -b release_test
+          git push -f -u origin release_test
+  job3:
+    name: merge_to_main
+    needs: job2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mezcla realese -> main
+        uses: tukasz/direct-merge-action@master
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          source-branch: release_test
+          target-branch: main        
